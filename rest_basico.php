@@ -38,21 +38,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nome = $data['nome'];
     $telefone = $data['telefone'];
     $email = $data['email'];
-
-    // resolver a conversão de data
     $datanasc = $data['datanasc'];
 
     echo ($mysqldate);
 
     try {
-        $stmt = $conn->prepare('INSERT INTO contato (nome, telefone, email) VALUES (:nome, :telefone, :email)');
+        $stmt = $conn->prepare('INSERT INTO contato (nome, telefone, email, datanasc) VALUES (:nome, :telefone, :email, :datanasc)');
         $stmt->bindParam(':nome', $nome);
         $stmt->bindParam(':telefone', $telefone);
         $stmt->bindParam(':email', $email);
+        $stmt->bindParam(':datanasc', $datanasc);
       
         $stmt->execute();
         $taskId = $conn->lastInsertId();
-        echo json_encode(['id' => $taskId, 'nome' => $nome, 'telefone' => $telefone, 'email' => $email]);
+        echo json_encode(['id' => $taskId, 'nome' => $nome, 'telefone' => $telefone, 'email' => $email, 'datanasc' => $datanasc]);
     } catch(PDOException $e) {
         echo json_encode(['error' => $e->getMessage()]);
     }
@@ -72,8 +71,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
     $nome = $data['nome'];
     $telefone = $data['telefone'];
     $email = $data['email'];
-
-    //resolver a conversão de data
     $datanasc = $data['datanasc'];
 
     try {
