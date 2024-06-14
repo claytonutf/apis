@@ -58,7 +58,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-// Rota para marcar uma tarefa como concluída
+// Rota para atualizar um contato
 if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
     $data = json_decode(file_get_contents('php://input'), true);
 
@@ -67,6 +67,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
         exit;
     }
 
+    // tratar campos nulos
     $id = $data['id'];
     $nome = $data['nome'];
     $telefone = $data['telefone'];
@@ -76,11 +77,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
     $datanasc = $data['datanasc'];
 
     try {
-        $stmt = $conn->prepare('UPDATE contato SET nome= :nome, telefone= :telefone, email= :email WHERE id = :id');
+        $stmt = $conn->prepare('UPDATE contato SET nome= :nome, telefone= :telefone, email= :email, datanasc= :datanasc WHERE id = :id');
         $stmt->bindParam(':id', $id);
         $stmt->bindParam(':nome', $nome);
         $stmt->bindParam(':telefone', $telefone);
         $stmt->bindParam(':email', $email);
+        $stmt->bindParam(':datanasc', $datanasc);
 
         $stmt->execute();
         echo json_encode(['success' => true]);
@@ -89,7 +91,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
     }
 }
 
-// Rota para deletar uma tarefa
+// Rota para deletar um contato
 if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
     $data = json_decode(file_get_contents('php://input'), true);
 
