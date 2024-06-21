@@ -17,10 +17,4 @@ print_r($respond);
 
 
 
-//$curl = curl_init();
-
-
-
-
-
 
