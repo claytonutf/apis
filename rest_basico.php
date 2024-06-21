@@ -3,14 +3,27 @@
 require 'database.php';
 
 // Rota para buscar todos os contatos
-if ($_SERVER['REQUEST_METHOD'] === 'GET' && empty($_GET)) {
-    try {
-        $stmt = $conn->query('SELECT * FROM contato');
-        $tasks = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        header('Content-Type: application/json');
-        echo json_encode($tasks);
-    } catch(PDOException $e) {
-        echo json_encode(['error' => $e->getMessage()]);
+if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+    
+    if(empty($_GET)){
+        try {
+            $stmt = $conn->query('SELECT * FROM contato');
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            header('Content-Type: application/json');
+            echo json_encode($result);
+        } catch(PDOException $e) {
+            echo json_encode(['error' => $e->getMessage()]);
+        }
+    }else{
+        $data = json_decode(file_get_contents('php://input'), true);
+        try {
+            $stmt = $conn->query('SELECT * FROM contato WHERE id='.$data['id']);
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            header('Content-Type: application/json');
+            echo json_encode($result);
+        } catch(PDOException $e) {
+            echo json_encode(['error' => $e->getMessage()]);
+        }
     }
 }
 
